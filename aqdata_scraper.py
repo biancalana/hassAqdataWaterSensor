@@ -13,6 +13,7 @@ from aqdata.config import load_config
 from aqdata.mqtt import publish_readings
 from aqdata.scraper import fetch_readings
 from aqdata.state import get_last_date, load_state, save_state
+from aqdata.statistics import import_statistics
 
 logging.basicConfig(
     level=logging.INFO,
@@ -57,8 +58,9 @@ def main():
         latest.date.isoformat(), latest.totalizer, latest.consumption,
     )
 
-    # Send to Home Assistant via MQTT
+    # Send to Home Assistant
     if not config.dry_run:
+        # Publish latest reading via MQTT first (creates entity in HA)
         if not publish_readings(
             config.mqtt_host, config.mqtt_port,
             config.mqtt_user, config.mqtt_password,
@@ -66,6 +68,16 @@ def main():
         ):
             logger.error("Failed to publish to MQTT")
             sys.exit(1)
+
+        # Then import historical readings with real timestamps via WebSocket
+        if config.since:
+            import time
+            logger.info("Waiting 5s for HA to process MQTT auto-discovery...")
+            time.sleep(5)
+            logger.info("Importing %d historical readings via statistics API", len(readings))
+            if not import_statistics(config.ha_url, config.ha_token, readings):
+                logger.error("Statistics import failed")
+                sys.exit(1)
     else:
         logger.info("Dry run — skipping MQTT publish")
 

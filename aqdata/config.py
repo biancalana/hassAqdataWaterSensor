@@ -16,6 +16,8 @@ class Config:
     mqtt_port: int
     mqtt_user: str
     mqtt_password: str
+    ha_url: str
+    ha_token: str
     since: datetime | None
     dry_run: bool
 
@@ -33,6 +35,8 @@ def load_config() -> Config:
     args = parse_args()
 
     required = ["AQDATA_USER", "AQDATA_PASSWORD", "MQTT_HOST"]
+    if args.since:
+        required += ["HA_URL", "HA_TOKEN"]
     missing = [k for k in required if not os.getenv(k)]
     if missing:
         raise SystemExit(f"Missing required env vars: {', '.join(missing)}")
@@ -46,6 +50,8 @@ def load_config() -> Config:
         mqtt_port=int(os.getenv("MQTT_PORT", "1883")),
         mqtt_user=os.getenv("MQTT_USER", ""),
         mqtt_password=os.getenv("MQTT_PASSWORD", ""),
+        ha_url=os.getenv("HA_URL", "").rstrip("/"),
+        ha_token=os.getenv("HA_TOKEN", ""),
         since=args.since,
         dry_run=args.dry_run,
     )
