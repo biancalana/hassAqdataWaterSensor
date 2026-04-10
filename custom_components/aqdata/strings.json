@@ -1,0 +1,20 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "AqData Hidrômetro",
+        "description": "Configure sua conta AqData para leitura do hidrômetro.",
+        "data": {
+          "username": "Usuário",
+          "password": "Senha",
+          "medidor_id": "ID do Medidor"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Não foi possível conectar ao servidor AqData",
+      "invalid_auth": "Usuário ou senha inválidos",
+      "unknown": "Erro inesperado"
+    }
+  }
+}
