@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "MCP(workflows:whats_next)",
+      "MCP(workflows:conduct_review)",
+      "MCP(workflows:list_workflows)",
+      "MCP(workflows:get_tool_info)",
+      "Read(README.md)",
+      "Read(./.vibe/**)",
+      "Write(./.vibe/**)"
+    ],
+    "ask": [
+      "Bash(*)",
+      "Write(**)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)"
+    ]
+  }
+}
