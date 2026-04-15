@@ -78,7 +78,7 @@ class AqDataConsumptionSensor(AqDataBaseSensor):
 
     _attr_name = "Consumo"
     _attr_device_class = SensorDeviceClass.WATER
-    _attr_state_class = SensorStateClass.MEASUREMENT
+    _attr_state_class = SensorStateClass.TOTAL_INCREASING
     _attr_native_unit_of_measurement = UnitOfVolume.CUBIC_METERS
     _attr_suggested_display_precision = 3
 
