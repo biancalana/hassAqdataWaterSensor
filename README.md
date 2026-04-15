@@ -36,6 +36,41 @@ Data is refreshed every 4 hours via `DataUpdateCoordinator`.
    - **Senha** — AqData login password
    - **ID do Medidor** — Your water meter ID (found in the AqData web portal)
 
+## Historical Data Import
+
+To backfill past readings into Home Assistant's Energy/Water dashboard, use the standalone scraper:
+
+```bash
+pip install -r requirements.txt
+```
+
+### Setup
+
+Create a `.env` file (see `.env.example`):
+
+```
+AQDATA_USERNAME=your_user
+AQDATA_PASSWORD=your_password
+AQDATA_MEDIDOR_ID=your_meter_id
+HA_URL=http://homeassistant.local:8123
+HA_TOKEN=your_long_lived_access_token
+```
+
+Generate a Long-Lived Access Token in HA: **Profile** → **Security** → **Long-Lived Access Tokens**.
+
+### Run
+
+```bash
+# Import all readings since a specific date:
+python aqdata_scraper.py --since 2024-01-01
+```
+
+This imports two external statistics series into HA:
+- `aqdata:water_total` — cumulative meter reading (m³)
+- `aqdata:water_consumption` — daily consumption (m³)
+
+State is tracked in `state.json` to avoid re-importing.
+
 ## Requirements
 
 - Home Assistant >= 2024.1
