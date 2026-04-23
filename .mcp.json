@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "workflows": {
+      "command": "npx",
+      "args": [
+        "@codemcp/workflows-server@latest"
+      ]
+    }
+  }
+}

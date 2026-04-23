@@ -40,8 +40,10 @@ class AqDataBaseSensor(CoordinatorEntity[AqDataCoordinator], SensorEntity):
         self,
         coordinator: AqDataCoordinator,
         config_entry: ConfigType,
+        unique_id_suffix: str,
     ) -> None:
         super().__init__(coordinator)
+        self._attr_unique_id = f"{config_entry.entry_id}_{unique_id_suffix}"
         self._attr_device_info = {
             "identifiers": {(DOMAIN, config_entry.entry_id)},
             "name": "AqData Hidrômetro",
@@ -57,6 +59,9 @@ class AqDataReadingSensor(AqDataBaseSensor):
     _attr_state_class = SensorStateClass.TOTAL_INCREASING
     _attr_native_unit_of_measurement = UnitOfVolume.CUBIC_METERS
     _attr_suggested_display_precision = 3
+
+    def __init__(self, coordinator: AqDataCoordinator, config_entry: ConfigType) -> None:
+        super().__init__(coordinator, config_entry, "reading")
 
     @property
     def native_value(self) -> float | None:
@@ -78,9 +83,12 @@ class AqDataConsumptionSensor(AqDataBaseSensor):
 
     _attr_name = "Consumo"
     _attr_device_class = SensorDeviceClass.WATER
-    _attr_state_class = SensorStateClass.TOTAL_INCREASING
+    _attr_state_class = SensorStateClass.MEASUREMENT
     _attr_native_unit_of_measurement = UnitOfVolume.CUBIC_METERS
     _attr_suggested_display_precision = 3
+
+    def __init__(self, coordinator: AqDataCoordinator, config_entry: ConfigType) -> None:
+        super().__init__(coordinator, config_entry, "consumption")
 
     @property
     def native_value(self) -> float | None:
